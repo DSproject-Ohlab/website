@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
-import { IonicVue, IonRouterOutlet } from '@ionic/vue'
-
+import {IonicVue, IonRouterOutlet} from '@ionic/vue'
+import {VNetworkGraph} from "v-network-graph";
 
 import './style.css'
 import App from './App.vue'
@@ -25,6 +25,7 @@ import '@ionic/vue/css/display.css';
 
 const app = createApp(App).use(IonicVue).use(router)
 
-app.component('IonRouterOutlet', IonRouterOutlet)
+app.component('IonRouterOutlet', IonRouterOutlet);
+app.component('v-network-graph', VNetworkGraph);
 
 app.mount('#app')

@@ -1,29 +1,58 @@
 <script setup>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/vue';
+import {
+    IonPage,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButton,
+    IonModal,
+    IonInput,
+    IonLabel,
+    IonButtons
+} from '@ionic/vue';
+import {ref} from 'vue';
+
+const isOpen = ref(false);
+const item = ref('');
+
+const setOpen = (value) => {
+    isOpen.value = value;
+}
+
+const selectItem = () => {
+    console.log('selected item', item.value.$el.value);
+    isOpen.value = false;
+}
+
 </script>
 <template>
     <ion-page>
         <ion-header :translucent="true">
             <ion-toolbar>
-                <ion-title>Blank</ion-title>
+                <ion-title>Home</ion-title>
             </ion-toolbar>
         </ion-header>
 
-        <ion-content :fullscreen="true">
-            <ion-header collapse="condense">
-                <ion-toolbar>
-                    <ion-title size="large">Blank</ion-title>
-                </ion-toolbar>
-            </ion-header>
-
-            <div id="container">
-                <strong>Ready to create an app?</strong>
-                <p>
-                    Start with Ionic
-                    <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI
-                        Components</a>
-                </p>
-            </div>
+        <ion-content class="ion-padding">
+            <ion-button expand="block" @click="setOpen(true)">select</ion-button>
+            <ion-modal :is-open="isOpen">
+                <ion-header>
+                    <ion-toolbar>
+                        <ion-buttons slot="start">
+                            <ion-button @click="setOpen(false)">Close</ion-button>
+                        </ion-buttons>
+                        <ion-title>Select</ion-title>
+                        <ion-buttons slot="end">
+                            <ion-button :strong="true" @click="selectItem()">Done</ion-button>
+                        </ion-buttons>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content class="ion-padding">
+                    <ion-label position="stacked">Write Category</ion-label>
+                    <ion-input ref="item" placeholder="Write Category" type="text"></ion-input>
+                </ion-content>
+            </ion-modal>
         </ion-content>
     </ion-page>
 </template>

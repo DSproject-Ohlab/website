@@ -38,7 +38,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v1
         with:
-          name: mindmap
+          name: github-pages
           path: ./app/dist
       - name: Deploy
-        uses: actions/deploy-pages@v1
+        uses: actions/deploy-pages@v2

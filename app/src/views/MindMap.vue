@@ -5,6 +5,7 @@ import "v-network-graph/lib/style.css";
 import {ForceLayout} from "v-network-graph/lib/force-layout";
 import {VNetworkGraph} from "v-network-graph";
 import {IonPage} from "@ionic/vue";
+import {useRouter} from "vue-router";
 
 interface Node extends vNG.Node {
     selectable?: boolean
@@ -185,6 +186,12 @@ const configs = reactive(vNG.defineConfigs<Node, Edge>({
         })
     }
 }))
+
+const router = useRouter();
+
+const toHome = () => {
+    router.push({name: "Home"});
+}
 </script>
 
 <template>
@@ -198,6 +205,7 @@ const configs = reactive(vNG.defineConfigs<Node, Edge>({
             <ion-button :disabled="!graph" @click="downloadSvg()">Download</ion-button>
             <ion-button :disabled="selectedEdges.length == 0" @click="selectEdge()">Select</ion-button>
             <ion-button :disabled="selectedNodes.length == 0" @click="addNodes()">Add</ion-button>
+            <ion-button @click="toHome">Home</ion-button>
             <v-network-graph ref="graph" v-model:selected-edges="selectedEdges" v-model:selected-nodes="selectedNodes"
                              :configs="configs"
                              :edges="edges"

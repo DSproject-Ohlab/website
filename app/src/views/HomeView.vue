@@ -12,6 +12,7 @@ import {
     IonButtons
 } from '@ionic/vue';
 import {ref} from 'vue';
+import {useRouter} from "vue-router";
 
 const isOpen = ref(false);
 const item = ref('');
@@ -20,9 +21,12 @@ const setOpen = (value) => {
     isOpen.value = value;
 }
 
+const router = useRouter();
+
 const selectItem = () => {
     console.log('selected item', item.value.$el.value);
     isOpen.value = false;
+    router.push({name: "MindMap"});
 }
 
 </script>

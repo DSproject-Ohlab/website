@@ -46,5 +46,3 @@ jobs:
           artifact-name: github-pages
           token: ${{ secrets.GITHUB_TOKEN }}
           clean: true
-          workspace: ./app/dist
-

@@ -35,8 +35,16 @@ jobs:
         working-directory: ./app
       - name: Setup Pages
         uses: actions/configure-pages@v3
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Build Artifact
+        uses: actions/upload-artifact@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./app/dist
+          name: github-pages
+          path: ./app/dist
+      - name: Deploy GitHub Pages site
+        uses: actions/deploy-pages@v2.0.1
+        with:
+          artifact-name: github-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
+          clean: true
+          workspace: ./app/dist
+

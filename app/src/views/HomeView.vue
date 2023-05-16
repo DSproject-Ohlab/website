@@ -13,6 +13,7 @@ import {
 } from '@ionic/vue';
 import {ref} from 'vue';
 import {useRouter} from "vue-router";
+import axios from "axios";
 
 const isOpen = ref(false);
 const item = ref('');
@@ -27,6 +28,12 @@ const selectItem = () => {
     console.log('selected item', item.value.$el.value);
     isOpen.value = false;
     router.push({name: "MindMap"});
+}
+
+const send = () => {
+    axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/brainstorming/').then((response) => {
+        console.log(response);
+    });
 }
 
 </script>

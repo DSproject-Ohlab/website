@@ -31,9 +31,10 @@ const selectItem = () => {
 }
 
 const send = () => {
-    axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/brainstorming/').then((response) => {
-        console.log(response);
-    });
+    axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/brainstorming/', {withCredentials: true})
+        .then((response) => {
+            console.log(response);
+        });
 }
 
 </script>
@@ -46,6 +47,7 @@ const send = () => {
         </ion-header>
 
         <ion-content class="ion-padding">
+            <ion-button @click="send()">send</ion-button>
             <ion-button expand="block" @click="setOpen(true)">select</ion-button>
             <ion-modal :is-open="isOpen">
                 <ion-header>

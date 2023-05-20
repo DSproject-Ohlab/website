@@ -4,7 +4,15 @@ import * as vNG from "v-network-graph";
 import "v-network-graph/lib/style.css";
 import {ForceLayout} from "v-network-graph/lib/force-layout";
 import {VNetworkGraph} from "v-network-graph";
-import {IonPage} from "@ionic/vue";
+import {
+    IonPage,
+    IonHeader,
+    IonToolbar,
+    IonTitle,
+    IonContent,
+    IonButton,
+    IonInput,
+} from "@ionic/vue";
 import {useRouter} from "vue-router";
 import {nextTick} from "vue"; // labeling을 위한 라이브러리 임포트
 

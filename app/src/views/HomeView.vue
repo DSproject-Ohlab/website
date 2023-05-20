@@ -9,12 +9,16 @@ import {
     IonModal,
     IonInput,
     IonLabel,
-    IonButtons
+    IonButtons,
+    IonRadioGroup,
+    IonList,
+    IonItem,
+    IonRadio,
+    IonCheckbox
 } from '@ionic/vue';
 import {ref} from 'vue';
 import {useRouter} from "vue-router";
 import axios from "axios";
-import { IonCheckbox } from '@ionic/vue';
 
 const isOpen = ref(false);
 const category = ref("");

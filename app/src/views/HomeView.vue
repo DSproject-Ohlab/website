@@ -13,6 +13,7 @@ import {
 } from '@ionic/vue';
 import {ref} from 'vue';
 import {useRouter} from "vue-router";
+import axios from "axios";
 
 const isOpen = ref(false);
 const item = ref('');
@@ -29,6 +30,13 @@ const selectItem = () => {
     router.push({name: "MindMap"});
 }
 
+const send = () => {
+    axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/brainstorming/', {withCredentials: true})
+        .then((response) => {
+            console.log(response);
+        });
+}
+
 </script>
 <template>
     <ion-page>
@@ -39,6 +47,7 @@ const selectItem = () => {
         </ion-header>
 
         <ion-content class="ion-padding">
+            <ion-button @click="send()">send</ion-button>
             <ion-button expand="block" @click="setOpen(true)">select</ion-button>
             <ion-modal :is-open="isOpen">
                 <ion-header>

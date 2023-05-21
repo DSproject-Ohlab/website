@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {reactive, ref, watch} from 'vue';
+import {reactive, ref, watch, computed} from 'vue';
 import * as vNG from "v-network-graph";
 import "v-network-graph/lib/style.css";
 import {ForceLayout} from "v-network-graph/lib/force-layout";
@@ -7,6 +7,7 @@ import {VNetworkGraph} from "v-network-graph";
 import {IonPage} from "@ionic/vue";
 import {useRouter} from "vue-router";
 import {nextTick} from "vue"; // labeling을 위한 라이브러리 임포트
+import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이브러리 임포트 
 
 // 1. Node 지워진거 다시 살리기 - difficult...
 //      - Delete Mode?
@@ -27,6 +28,7 @@ import {nextTick} from "vue"; // labeling을 위한 라이브러리 임포트
 6. Hide 버튼 누르면 모든 Dashed edge 삭제
 7. Hide 버튼 누르면 선택된 node에 대해서만 Dashed edge와 node 삭제하도록 변경
 */
+
 // [TODO LIST]
 // 1. Delete Node - Recursive는 아니라 불완전
 // 2. Axios data 넘기기 - AddArbitraryNode 관련
@@ -185,16 +187,18 @@ const addarbitraryNodes = () => {
         const source = selectedNodes.value[0];
         const newNode = "node" + nextNodeIndex.value;
         const newEdge = "edge" + nextEdgeIndex.value;
-        nodes[newNode] = {name: "N" + nextNodeIndex.value, selectable: true};
-        // nodes[newNode] = {name: newNodeLabel.value , selectable: true};
+        // nodes[newNode] = {name: "N" + nextNodeIndex.value, selectable: true};
+        nodes[newNode] = {name: newNodeLabel.value , selectable: true};
         edges[newEdge] = {source: source, target: newNode, color: "blue", dashed: false, selectable: true};
         nextNodeIndex.value++;
         nextEdgeIndex.value++;
-        // nextTick(() => {
-        //     newNodeLabel.value = ""; // reset the label input
-        // });
+        nextTick(() => {
+            newNodeLabel.value = ""; // reset the label input
+        });
     }
 }
+
+
 
 // function for delete node
 const deleteNode = () => {
@@ -381,6 +385,8 @@ const toHome = () => {
             <ion-button :disabled="selectedNodes.length == 0" @click="recommend()">Recommend</ion-button>
             <ion-button :disabled="selectedNodes.length == 0" @click="hideUnselected(selectedNodes[0])">Hide</ion-button>
             <ion-input v-model="newNodeLabel" placeholder="Enter new node label"></ion-input>
+            <!-- <ion-input :value="newNodeLabel.value" @input="newNodeLabel.value = $event.target.value" placeholder="Enter new node label"></ion-input> -->
+            <!-- <ion-input v-model="newNodeLabelComputed" placeholder="Enter new node label"></ion-input> -->
             <ion-button :disabled="selectedNodes.length == 0 || newNodeLabel.value == ''" @click="addarbitraryNodes()">Add</ion-button>
             <!-- <ion-button :disabled="selectedNodes.length == 0" @click="addNodes()">Add</ion-button> -->
             <ion-button :disabled="selectedNodes.length == 0" @click="deleteNode()">Delete</ion-button>

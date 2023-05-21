@@ -4,15 +4,7 @@ import * as vNG from "v-network-graph";
 import "v-network-graph/lib/style.css";
 import {ForceLayout} from "v-network-graph/lib/force-layout";
 import {VNetworkGraph} from "v-network-graph";
-import {
-    IonPage,
-    IonHeader,
-    IonToolbar,
-    IonTitle,
-    IonContent,
-    IonButton,
-    IonInput,
-} from "@ionic/vue";
+import {IonPage} from "@ionic/vue";
 import {useRouter} from "vue-router";
 import {nextTick} from "vue"; // labeling을 위한 라이브러리 임포트
 
@@ -25,6 +17,19 @@ import {nextTick} from "vue"; // labeling을 위한 라이브러리 임포트
 // 5. Category check box - Marketer / Developer / Designer -> 완료 -> 하나만 선택하기도 완료
 // 6. select하면 add까지 - 완료
 // 7. Root 단어 강조 - 완료
+/* [5.21]
+1. Delete Button 추가 완료 -> 마지막 node에 대해서만 구현됐음 -> 중간 delete를 위해서는 DFS 필요할듯
+    -> 컨셉 회의해보고 구현여부 결정
+2. Default로 Dahsed Edge와 node 숨김
+3. Recommend 버튼 누르면 10개의 node 생성(추천 단어들)
+4. Recommend 버튼 중복 가능
+5. Hide 버튼 추가
+6. Hide 버튼 누르면 모든 Dashed edge 삭제
+7. Hide 버튼 누르면 선택된 node에 대해서만 Dashed edge와 node 삭제하도록 변경
+*/
+// [TODO LIST]
+// 1. Delete Node - Recursive는 아니라 불완전
+// 2. Axios data 넘기기 - AddArbitraryNode 관련
 
 interface Node extends vNG.Node {
     selectable?: boolean
@@ -38,29 +43,29 @@ interface Edge extends vNG.Edge {
 
 const nodes: reactive<Record<string, Node>> = reactive({
     node1: {id: "node1" ,name: "N1", selectable: true},
-    node2: {id: "node2" ,name: "N2", selectable: false},
-    node3: {id: "node3" ,name: "N3", selectable: false},
-    node4: {id: "node4" ,name: "N4", selectable: false},
-    node5: {id: "node5" ,name: "N5", selectable: false},
-    node6: {id: "node6" ,name: "N6", selectable: false},
-    node7: {id: "node7" ,name: "N7", selectable: false},
-    node8: {id: "node8" ,name: "N8", selectable: false},
-    node9: {id: "node9" ,name: "N9", selectable: false},
-    node10: {id: "node10" ,name: "N10", selectable: false},
-    node11: {id: "node11" ,name: "N11", selectable: false},
+    // node2: {id: "node2" ,name: "N2", selectable: false},
+    // node3: {id: "node3" ,name: "N3", selectable: false},
+    // node4: {id: "node4" ,name: "N4", selectable: false},
+    // node5: {id: "node5" ,name: "N5", selectable: false},
+    // node6: {id: "node6" ,name: "N6", selectable: false},
+    // node7: {id: "node7" ,name: "N7", selectable: false},
+    // node8: {id: "node8" ,name: "N8", selectable: false},
+    // node9: {id: "node9" ,name: "N9", selectable: false},
+    // node10: {id: "node10" ,name: "N10", selectable: false},
+    // node11: {id: "node11" ,name: "N11", selectable: false},
 })
 
 const edges: reactive<Record<string, Edge>> = reactive({
-    edge1: {source: "node1", target: "node2", dashed: true, color: "black", selectable: true},
-    edge2: {source: "node1", target: "node3", dashed: true, color: "black", selectable: true},
-    edge3: {source: "node1", target: "node4", dashed: true, color: "black", selectable: true},
-    edge4: {source: "node1", target: "node5", dashed: true, color: "black", selectable: true},
-    edge5: {source: "node1", target: "node6", dashed: true, color: "black", selectable: true},
-    edge6: {source: "node1", target: "node7", dashed: true, color: "black", selectable: true},
-    edge7: {source: "node1", target: "node8", dashed: true, color: "black", selectable: true},
-    edge8: {source: "node1", target: "node9", dashed: true, color: "black", selectable: true},
-    edge9: {source: "node1", target: "node10", dashed: true, color: "black", selectable: true},
-    edge10: {source: "node1", target: "node11", dashed: true, color: "black", selectable: true},
+    // edge1: {source: "node1", target: "node2", dashed: true, color: "black", selectable: true},
+    // edge2: {source: "node1", target: "node3", dashed: true, color: "black", selectable: true},
+    // edge3: {source: "node1", target: "node4", dashed: true, color: "black", selectable: true},
+    // edge4: {source: "node1", target: "node5", dashed: true, color: "black", selectable: true},
+    // edge5: {source: "node1", target: "node6", dashed: true, color: "black", selectable: true},
+    // edge6: {source: "node1", target: "node7", dashed: true, color: "black", selectable: true},
+    // edge7: {source: "node1", target: "node8", dashed: true, color: "black", selectable: true},
+    // edge8: {source: "node1", target: "node9", dashed: true, color: "black", selectable: true},
+    // edge9: {source: "node1", target: "node10", dashed: true, color: "black", selectable: true},
+    // edge10: {source: "node1", target: "node11", dashed: true, color: "black", selectable: true},
 })
 
 const layouts = ref({
@@ -78,6 +83,11 @@ const nextEdgeIndex = ref(Object.keys(edges).length + 1);
 
 const selectedNodes = ref<string[]>([]);
 const selectedEdges = ref<string[]>([]);
+
+// store all the nodes and edges
+const allNodes = ref({...nodes});
+const allEdges = ref({...edges});
+
 
 // delete node button
 // const deleteMode = ref(false);
@@ -176,7 +186,7 @@ const addarbitraryNodes = () => {
         const newNode = "node" + nextNodeIndex.value;
         const newEdge = "edge" + nextEdgeIndex.value;
         nodes[newNode] = {name: "N" + nextNodeIndex.value, selectable: true};
-        // nodes[newNode] = {name: newNodeLabel.value, selectable: true};
+        // nodes[newNode] = {name: newNodeLabel.value , selectable: true};
         edges[newEdge] = {source: source, target: newNode, color: "blue", dashed: false, selectable: true};
         nextNodeIndex.value++;
         nextEdgeIndex.value++;
@@ -185,6 +195,70 @@ const addarbitraryNodes = () => {
         // });
     }
 }
+
+// function for delete node
+const deleteNode = () => {
+    if (selectedNodes.value.length > 0) {
+        const nodeToDelete = selectedNodes.value[0];
+
+
+        // Remove the target node associated with the edges
+        for (const edge in edges) {
+            if (edges[edge].source === nodeToDelete || edges[edge].target === nodeToDelete) {
+                delete nodes[edges[edge].target];
+            }
+        }
+        // Remove the associated edges
+        for (const edge in edges) {
+            if (edges[edge].source === nodeToDelete || edges[edge].target === nodeToDelete) {
+                delete edges[edge];
+            }
+        }
+
+        // Remove the node
+        delete nodes[nodeToDelete];
+
+        // Reset the selectedNodes array
+        selectedNodes.value = [];
+    }
+}
+
+// Recommend function
+const recommend = () => {
+  const source = selectedNodes.value[0];
+  if (source) {
+    for (let i = 0; i < 10; i++) {
+      const newNode = "node" + nextNodeIndex.value;
+      const newEdge = "edge" + nextEdgeIndex.value;
+      nodes[newNode] = { id: newNode, name: "N" + nextNodeIndex.value, selectable: true };
+      edges[newEdge] = { source: source, target: newNode, color: "black", dashed: true, selectable: true };
+      nextNodeIndex.value++;
+      nextEdgeIndex.value++;
+    }
+  }
+};
+
+// Hide unselected nodes
+const hideUnselected = (selectedNode: string) => {
+  // Iterate over all edges
+  for (const e in edges) {
+    // If this edge starts from the selected node and is dashed
+    if (edges[e].source == selectedNode && edges[e].dashed) {
+      // Delete this edge and the target node
+      delete nodes[edges[e].target];
+      delete edges[e];
+    } else if (edges[e].source == selectedNode) {
+      // Set the properties of remaining edges starting from the selected node
+      edges[e].dashed = false;
+      edges[e].color = "blue";
+      edges[e].selectable = false;
+      nodes[edges[e].source].selectable = false;
+      nodes[edges[e].target].selectable = true;
+    }
+  }
+};
+
+
 
 const canSelect = () => {
     if (selectedEdges.value.length == 0) {
@@ -304,10 +378,12 @@ const toHome = () => {
         <ion-content :fullscreen="true">
             <ion-button :disabled="!graph" @click="downloadSvg()">Download</ion-button>
             <ion-button :disabled="selectedEdges.length == 0" @click="selectEdge()">Select</ion-button>
-            <!-- <ion-button @click="deleteMode.value = !deleteMode.value">Delete</ion-button> -->
+            <ion-button :disabled="selectedNodes.length == 0" @click="recommend()">Recommend</ion-button>
+            <ion-button :disabled="selectedNodes.length == 0" @click="hideUnselected(selectedNodes[0])">Hide</ion-button>
             <ion-input v-model="newNodeLabel" placeholder="Enter new node label"></ion-input>
             <ion-button :disabled="selectedNodes.length == 0 || newNodeLabel.value == ''" @click="addarbitraryNodes()">Add</ion-button>
             <!-- <ion-button :disabled="selectedNodes.length == 0" @click="addNodes()">Add</ion-button> -->
+            <ion-button :disabled="selectedNodes.length == 0" @click="deleteNode()">Delete</ion-button>
             <ion-button @click="toHome">Home</ion-button>
             <v-network-graph ref="graph" v-model:selected-edges="selectedEdges" v-model:selected-nodes="selectedNodes"
                              :configs="configs"

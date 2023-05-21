@@ -12,5 +12,15 @@ export default defineConfig({
     strictPort: true,
     port: 5173
   },
-  base: '/'
+  base: '/',
+  build: {
+    outDir: 'dist',
+    target: 'es2015',
+    assetsDir: '/',
+    rollupOptions: {
+      input: {
+        main: './src/main.js'
+      }
+    }
+  }
 })

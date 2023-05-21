@@ -7,7 +7,7 @@ import {VNetworkGraph} from "v-network-graph";
 import {IonPage} from "@ionic/vue";
 import {useRouter} from "vue-router";
 import {nextTick} from "vue"; // labeling을 위한 라이브러리 임포트
-import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이브러리 임포트
+import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이브러리 임포트 
 
 // 1. Node 지워진거 다시 살리기 - difficult...
 //      - Delete Mode?

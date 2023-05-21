@@ -15,15 +15,8 @@ export default defineConfig({
   base: '/',
   build: {
     outDir: 'dist',
-    target: 'es2015',
-    assetsDir: '/',
     rollupOptions: {
-      input: {
-        main: './src/main.js'
-      },
       output: {
-        entryFileNames: 'js/[name]-[hash].js',
-        chunkFileNames: 'js/[name]-[hash].js',
         assetFileNames: 'assets/[name]-[hash].[ext]',
       }
     }

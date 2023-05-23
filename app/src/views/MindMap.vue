@@ -18,7 +18,8 @@ import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이�
 // 5. Category check box - Marketer / Developer / Designer -> 완료 -> 하나만 선택하기도 완료
 // 6. select하면 add까지 - 완료
 // 7. Root 단어 강조 - 완료
-/* [5.21]
+/* 
+[5.21]
 1. Delete Button 추가 완료 -> 마지막 node에 대해서만 구현됐음 -> 중간 delete를 위해서는 DFS 필요할듯
     -> 컨셉 회의해보고 구현여부 결정
 2. Default로 Dahsed Edge와 node 숨김
@@ -28,6 +29,8 @@ import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이�
 6. Hide 버튼 누르면 모든 Dashed edge 삭제
 7. Hide 버튼 누르면 선택된 node에 대해서만 Dashed edge와 node 삭제하도록 변경
 8. Labeling Bug fix : 임의의 노드 추가 시 Label이 안보이던 문제 해결
+[5.23]
+1. Hide 버튼 누르면 해당 node가 selectable이 false가 되던 문제 해결
 */
 
 // [TODO LIST]

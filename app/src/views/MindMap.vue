@@ -27,10 +27,12 @@ import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이�
 5. Hide 버튼 추가
 6. Hide 버튼 누르면 모든 Dashed edge 삭제
 7. Hide 버튼 누르면 선택된 node에 대해서만 Dashed edge와 node 삭제하도록 변경
+8. Labeling Bug fix : 임의의 노드 추가 시 Label이 안보이던 문제 해결
 */
 
 // [TODO LIST]
-// 1. Delete Node - Recursive는 아니라 불완전
+// 1. Delete Node - 마지막 노드에 대해서만 삭제 가능, 
+//                  좀 더 딥한 node는 DFS로 Recursive하게 구현해야되는데 이건 논의 해보고 구현 결정
 // 2. Axios data 넘기기 - AddArbitraryNode 관련
 
 interface Node extends vNG.Node {
@@ -256,7 +258,7 @@ const hideUnselected = (selectedNode: string) => {
       edges[e].dashed = false;
       edges[e].color = "blue";
       edges[e].selectable = false;
-      nodes[edges[e].source].selectable = false;
+      nodes[edges[e].source].selectable = true;
       nodes[edges[e].target].selectable = true;
     }
   }

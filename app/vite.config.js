@@ -12,5 +12,13 @@ export default defineConfig({
     strictPort: true,
     port: 5173
   },
-  base: '/'
+  base: '/',
+  build: {
+    outDir: 'dist',
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name]-[hash].[ext]',
+      }
+    }
+  }
 })

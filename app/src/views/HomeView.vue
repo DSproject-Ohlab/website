@@ -44,12 +44,12 @@ const selectItem = () => {
 }
 
 
-const send = () => {
-    axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/brainstorming/', {withCredentials: true})
-        .then((response) => {
-            console.log(response);
-        });
-}
+// const send = () => {
+//     axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/brainstorming/', {withCredentials: true})
+//         .then((response) => {
+//             console.log(response);
+//         });
+// }
 
 const onCheckboxChange = (checked, newCategory) => {
     if (checked) {
@@ -60,16 +60,13 @@ const onCheckboxChange = (checked, newCategory) => {
 </script>
 <template>
     <ion-page>
-        <ion-header :translucent="true">
-            <ion-toolbar>
-                <ion-title>Home</ion-title>
-            </ion-toolbar>
-        </ion-header>
-
         <ion-content class="ion-padding">
-            <ion-button @click="send()">send</ion-button>
-            <ion-button expand="block" @click="setOpen(true)">select</ion-button>
-            <ion-modal :is-open="isOpen">
+                <img src="../assets/home_image.png" alt="home_image">
+            <div class="startbutton">
+                <ion-button @click="setOpen(true)" size="Large">Start</ion-button>
+            </div>
+        <!-- Add more <img> tags for other images -->
+        <ion-modal :is-open="isOpen">
                 <ion-header>
                     <ion-toolbar>
                         <ion-buttons slot="start">
@@ -82,9 +79,6 @@ const onCheckboxChange = (checked, newCategory) => {
                     </ion-toolbar>
                 </ion-header>
                 <ion-content class="ion-padding">
-                    <!-- <ion-label position="stacked">Write Category</ion-label>
-                    <ion-input ref="item" placeholder="Write Category" type="text"></ion-input> -->
-                    <!-- <teleport to="body"> -->
                         <ion-radio-group v-model="category">
                             <ion-list>
                                 <ion-item>
@@ -101,22 +95,19 @@ const onCheckboxChange = (checked, newCategory) => {
                                 </ion-item>
                             </ion-list>
                         </ion-radio-group>
-                    <!-- </teleport> -->
-                    <!-- <ion-item>
-                            <ion-label>Marketer</ion-label>
-                            <ion-checkbox slot="start" @ionChange="e => onCheckboxChange(e.detail.checked, 'Marketer')" :checked="category.value === 'Marketer'"></ion-checkbox>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label>Developer</ion-label>
-                            <ion-checkbox slot="start" @ionChange="e => onCheckboxChange(e.detail.checked, 'Developer')" :checked="category.value === 'Developer'"></ion-checkbox>
-                        </ion-item>
-                        <ion-item>
-                            <ion-label>Designer</ion-label>
-                            <ion-checkbox slot="start" @ionChange="e => onCheckboxChange(e.detail.checked, 'Designer')" :checked="category.value === 'Designer'"></ion-checkbox>
-                        </ion-item> -->
                 </ion-content>
             </ion-modal>
         </ion-content>
+        <ion-header :translucent="true">
+            <ion-toolbar>
+                <ion-title>MindView</ion-title>
+            </ion-toolbar>
+        </ion-header>
+
+        <!-- <ion-content class="ion-padding"> -->
+            <!-- <ion-button @click="send()">send</ion-button> -->
+            <!-- <ion-button expand="block" @click="setOpen(true)">select</ion-button> -->
+        <!-- </ion-content> -->
     </ion-page>
 </template>
 
@@ -168,5 +159,31 @@ ion-radio.ios::part(container) {
   .radio-checked.ios::part(container) {
     border-color: #6815ec;
   }
-  
+
+.startbutton {
+position: absolute;
+    left: 17.5%;
+    transform: translateX(-50%);
+    bottom: 300px;
+    font-size: 16px;
+    padding: 8px 16px;;
+}
+
+.startbutton ion-button {
+    min-width: 120px;
+    min-height: 50px;
+}
+/*   
+ion-button {
+  position: absolute;
+  left: 18.7%;
+  transform: translateX(-50%);
+  bottom: 320px;
+  font-size: 16px;
+  padding: 8px 16px;
+  min-width: 200px;
+  min-height: 50px;
+} */
+
+
 </style>

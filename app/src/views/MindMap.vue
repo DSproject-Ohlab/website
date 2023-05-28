@@ -205,27 +205,58 @@ const addarbitraryNodes = () => {
 
 
 
+// // function for delete node
+// const deleteNode = () => {
+//     if (selectedNodes.value.length > 0) {
+//         const nodeToDelete = selectedNodes.value[0];
+
+
+//         // Remove the target node associated with the edges
+//         for (const edge in edges) {
+//             if (edges[edge].source === nodeToDelete || edges[edge].target === nodeToDelete) {
+//                 delete nodes[edges[edge].target];
+//             }
+//         }
+//         // Remove the associated edges
+//         for (const edge in edges) {
+//             if (edges[edge].source === nodeToDelete || edges[edge].target === nodeToDelete) {
+//                 delete edges[edge];
+//             }
+//         }
+
+//         // Remove the node
+//         delete nodes[nodeToDelete];
+
+//         // Reset the selectedNodes array
+//         selectedNodes.value = [];
+//     }
+// }
+
 // function for delete node
 const deleteNode = () => {
     if (selectedNodes.value.length > 0) {
         const nodeToDelete = selectedNodes.value[0];
 
-
-        // Remove the target node associated with the edges
-        for (const edge in edges) {
-            if (edges[edge].source === nodeToDelete || edges[edge].target === nodeToDelete) {
-                delete nodes[edges[edge].target];
+        const deleteNodeAndEdges = (nodeId) => {
+            // Remove the target node associated with the edges
+            for (const edge in edges) {
+                if (edges[edge].source === nodeId) {
+                    const targetNode = edges[edge].target;
+                    delete nodes[targetNode];
+                    deleteNodeAndEdges(targetNode); // Recursively delete children nodes
+                }
             }
-        }
-        // Remove the associated edges
-        for (const edge in edges) {
-            if (edges[edge].source === nodeToDelete || edges[edge].target === nodeToDelete) {
-                delete edges[edge];
+            // Remove the associated edges
+            for (const edge in edges) {
+                if (edges[edge].source === nodeId || edges[edge].target === nodeId) {
+                    delete edges[edge];
+                }
             }
-        }
+            // Remove the node
+            delete nodes[nodeId];
+        };
 
-        // Remove the node
-        delete nodes[nodeToDelete];
+        deleteNodeAndEdges(nodeToDelete);
 
         // Reset the selectedNodes array
         selectedNodes.value = [];

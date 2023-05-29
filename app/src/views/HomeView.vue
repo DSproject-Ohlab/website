@@ -22,8 +22,8 @@ import axios from "axios";
 import Thumbnail from './Thumbnail.vue';
 
 const isOpen = ref(false);
-const category = ref("");
-
+const category = ref('');
+const Centerword = ref('');
 // const item = ref('');
 
 const setOpen = (value) => {
@@ -41,7 +41,12 @@ const router = useRouter();
 const selectItem = () => {
     console.log('selected category', category.value);
     isOpen.value = false;
-    router.push({name: "MindMap"});
+    router.push({
+        name: 'MindMap', 
+        params: { 
+            Centerword: Centerword.value 
+        } 
+    });
 }
 
 
@@ -58,6 +63,18 @@ const onCheckboxChange = (checked, newCategory) => {
     }
 }
 
+
+const sendCenterword = () => {
+    selectItem(); // navigate to the MindMap page after successful submission
+    axios.post('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app', { Centerword: Centerword.value, category: category.value })
+        .then((response) => {
+            console.log(response);
+        })
+        .catch((error) => {
+            console.error(error);
+            // Handle error scenario
+        });
+}
 
 </script>
 <template>
@@ -78,9 +95,9 @@ const onCheckboxChange = (checked, newCategory) => {
                             <ion-button @click="setOpen(false)">Close</ion-button>
                         </ion-buttons>
                         <ion-title>Select Category</ion-title>
-                        <ion-buttons slot="end">
+                        <!-- <ion-buttons slot="end">
                             <ion-button :strong="true" @click="selectItem()">Done</ion-button>
-                        </ion-buttons>
+                        </ion-buttons> -->
                     </ion-toolbar>
                 </ion-header>
                 <ion-content class="ion-padding">
@@ -100,6 +117,11 @@ const onCheckboxChange = (checked, newCategory) => {
                                 </ion-item>
                             </ion-list>
                         </ion-radio-group>
+                        <ion-item>
+                            <ion-label position="stacked">Enter your Root Idea</ion-label>
+                            <ion-input v-model="Centerword"></ion-input>
+                        </ion-item>
+                        <ion-button expand="Default" @click="sendCenterword()">Enter</ion-button>
                 </ion-content>
             </ion-modal>
         </ion-content>
@@ -193,8 +215,6 @@ ion-radio.ios::part(container) {
   min-width: 10vw;
   min-height: 7vh;
 }
-
-
 
 
 </style>

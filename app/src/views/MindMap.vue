@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {reactive, ref, watch, computed} from 'vue';
+import {reactive, ref, watch, computed, onMounted} from 'vue';
 import * as vNG from "v-network-graph";
 import "v-network-graph/lib/style.css";
 import {ForceLayout} from "v-network-graph/lib/force-layout";
@@ -33,14 +33,22 @@ import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이�
 1. Hide 버튼 누르면 해당 node가 selectable이 false가 되던 문제 해결
 [5.27]
 1. delete DFS 구현 완료
-[5.29]
+[5.28]
 1. main page 구현 완료
+[5.29]
+1. main page image css로 변환
+2. Centerword update
 */
 
 // [TODO LIST]
 // 1. Delete Node - 마지막 노드에 대해서만 삭제 가능, 
 //                  좀 더 딥한 node는 DFS로 Recursive하게 구현해야되는데 이건 논의 해보고 구현 결정
 // 2. Axios data 넘기기 - AddArbitraryNode 관련
+
+const router = useRouter();
+
+const route = router.currentRoute.value;
+const Centerword = ref(route.params.Centerword);
 
 interface Node extends vNG.Node {
     selectable?: boolean
@@ -53,7 +61,7 @@ interface Edge extends vNG.Edge {
 }
 
 const nodes: reactive<Record<string, Node>> = reactive({
-    node1: {id: "node1" ,name: "N1", selectable: true},
+    node1: {id: "node1" ,name: Centerword, selectable: true},
     // node2: {id: "node2" ,name: "N2", selectable: false},
     // node3: {id: "node3" ,name: "N3", selectable: false},
     // node4: {id: "node4" ,name: "N4", selectable: false},
@@ -104,6 +112,7 @@ const allEdges = ref({...edges});
 // const deleteMode = ref(false);
 
 const selectEdge = () => {
+    console.log(Centerword.value)
     const selEdge = selectedEdges.value;
     let targetNode: Array<string> = [];
     let sourceNode = null;
@@ -358,8 +367,8 @@ const configs = reactive(vNG.defineConfigs<Node, Edge>({
         normal: {
             // 꾸미기
             // color: '#ff0',
-            color: node => node.name === "N1" ? '#90EE90' : "#ff0" , // LightGreen
-            radius: node => node.name === "N1" ? 30 : 15, // Increase size of node
+            color: node => node.id === "node1" ? '#90EE90' : "#ff0" , // LightGreen
+            radius: node => node.id === "node1" ? 30 : 15, // Increase size of node
             // stroke: {
             //     color: '#006400', // DarkGreen
             //     width: 3, // Border width
@@ -404,8 +413,6 @@ const configs = reactive(vNG.defineConfigs<Node, Edge>({
         })
     }
 }))
-
-const router = useRouter();
 
 const toHome = () => {
     router.push({name: "Home"});

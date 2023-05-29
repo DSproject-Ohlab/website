@@ -49,7 +49,7 @@ import axios from "axios";
 const router = useRouter();
 const Centerword = ref('');
 const category = ref('');
-const recommended_item = ref('');
+let recommended_item = ref('');
 
 
 interface Node extends vNG.Node {
@@ -122,9 +122,24 @@ onMounted(() => {
     category.value = query.category;
     axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/center/' + category.value + '/' + Centerword.value, {withCredentials: true})
     .then((response) => {
-        console.log(response);
         recommended_item = response.data;
-        console.log(recommended_item);
+
+        for (const i in recommended_item) {
+            nodes['node' + nextNodeIndex.value] = {
+                id: 'node' + nextNodeIndex.value,
+                name: recommended_item[i],
+                selectable: false
+            };
+            edges['edge' + nextEdgeIndex.value] = {
+                source: 'node1',
+                target: 'node' + nextNodeIndex.value,
+                dashed: true,
+                color: "black",
+                selectable: true
+            };
+            nextNodeIndex.value++;
+            nextEdgeIndex.value++;
+        }
     })
     .catch((error) => {
         console.error(error);
@@ -133,13 +148,7 @@ onMounted(() => {
     
 });
 
-for (const i in recommended_item) {
-    // console.log(i);
-            nodes['node' + nextNodeIndex.value] = {id: 'node' + nextNodeIndex.value, name: i, selectable: false};
-            edges['edge' + nextEdgeIndex.value] = {source: 'node1', target: 'node' + nextNodeIndex.value, dashed: true, color: "black", selectable: true};
-            nextNodeIndex.value++;
-            nextEdgeIndex.value++;
-}
+
 const selectEdge = () => {
     const selEdge = selectedEdges.value;
     let targetNode: Array<string> = [];

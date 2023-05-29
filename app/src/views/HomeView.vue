@@ -66,7 +66,7 @@ const onCheckboxChange = (checked, newCategory) => {
 
 const sendCenterword = () => {
     selectItem(); // navigate to the MindMap page after successful submission
-    axios.post('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app', { Centerword: Centerword.value, category: category.value })
+    axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/center/' + category.value + '/' + Centerword.value, {withCredentials: true})
         .then((response) => {
             console.log(response);
         })

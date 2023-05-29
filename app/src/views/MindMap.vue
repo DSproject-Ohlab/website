@@ -7,7 +7,8 @@ import {VNetworkGraph} from "v-network-graph";
 import {IonPage} from "@ionic/vue";
 import {useRouter} from "vue-router";
 import {nextTick} from "vue"; // labeling을 위한 라이브러리 임포트
-import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이브러리 임포트 
+import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이브러리 임포트
+import axios from "axios"; 
 
 // 1. Node 지워진거 다시 살리기 - difficult...
 //      - Delete Mode?
@@ -46,9 +47,10 @@ import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이�
 // 2. Axios data 넘기기 - AddArbitraryNode 관련
 
 const router = useRouter();
+const Centerword = ref('');
+const category = ref('');
+const recommended_item = ref('');
 
-const route = router.currentRoute.value;
-const Centerword = ref(route.params.Centerword);
 
 interface Node extends vNG.Node {
     selectable?: boolean
@@ -87,6 +89,7 @@ const edges: reactive<Record<string, Edge>> = reactive({
     // edge10: {source: "node1", target: "node11", dashed: true, color: "black", selectable: true},
 })
 
+
 const layouts = ref({
     nodes: {
         node1: {
@@ -111,8 +114,33 @@ const allEdges = ref({...edges});
 // delete node button
 // const deleteMode = ref(false);
 
+onMounted(() => {
+    const query = router.currentRoute.value.query;
+    if (query && query.Centerword) {
+    Centerword.value = query.Centerword;
+    }
+    category.value = query.category;
+    axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/center/' + category.value + '/' + Centerword.value, {withCredentials: true})
+    .then((response) => {
+        console.log(response);
+        recommended_item = response.data;
+        console.log(recommended_item);
+    })
+    .catch((error) => {
+        console.error(error);
+        // Handle error scenario
+    });
+    
+});
+
+for (const i in recommended_item) {
+    // console.log(i);
+            nodes['node' + nextNodeIndex.value] = {id: 'node' + nextNodeIndex.value, name: i, selectable: false};
+            edges['edge' + nextEdgeIndex.value] = {source: 'node1', target: 'node' + nextNodeIndex.value, dashed: true, color: "black", selectable: true};
+            nextNodeIndex.value++;
+            nextEdgeIndex.value++;
+}
 const selectEdge = () => {
-    console.log(Centerword.value)
     const selEdge = selectedEdges.value;
     let targetNode: Array<string> = [];
     let sourceNode = null;

@@ -43,9 +43,10 @@ const selectItem = () => {
     isOpen.value = false;
     router.push({
         name: 'MindMap', 
-        params: { 
-            Centerword: Centerword.value 
-        } 
+        query: {
+            Centerword: Centerword.value,
+            category: category.value 
+        }
     });
 }
 
@@ -63,18 +64,6 @@ const onCheckboxChange = (checked, newCategory) => {
     }
 }
 
-
-const sendCenterword = () => {
-    selectItem(); // navigate to the MindMap page after successful submission
-    axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/center/' + category.value + '/' + Centerword.value, {withCredentials: true})
-        .then((response) => {
-            console.log(response);
-        })
-        .catch((error) => {
-            console.error(error);
-            // Handle error scenario
-        });
-}
 
 </script>
 <template>
@@ -121,7 +110,7 @@ const sendCenterword = () => {
                             <ion-label position="stacked">Enter your Root Idea</ion-label>
                             <ion-input v-model="Centerword"></ion-input>
                         </ion-item>
-                        <ion-button expand="Default" @click="sendCenterword()">Enter</ion-button>
+                        <ion-button expand="Default" @click="selectItem()">Enter</ion-button>
                 </ion-content>
             </ion-modal>
         </ion-content>

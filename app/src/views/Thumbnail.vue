@@ -21,15 +21,15 @@ defineProps({});
             login or registration required.
             </div>
 
-            <img class="asset-4-1" src="../assets/Asset 4 1.png" />
+            <img class="asset-4-1" src="../assets/Asset_4_1.png"/>
 
-            <img class="email-template-1" src="../assets/Email Template 1.png" />
+            <img class="email-template-1" src="../assets/Email_Template_1.png"/>
 
-            <img class="email-template-1-1" src="../assets/Email Template-1 1.png" />
+            <img class="email-template-1-1" src="../assets/EmailTemplate-1_1.png"/>
 
-            <img class="rectangle-2" src="../assets/Rectangle 2.png" />
+            <img class="rectangle-2" src="../assets/Rectangle_2.png"/>
 
-            <img class="image-1" src="../assets/image 1.png" />
+            <img class="image-1" src="../assets/image_1.png"/>
         </div>
     </IonContent>
 </template>

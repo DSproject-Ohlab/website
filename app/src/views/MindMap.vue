@@ -31,6 +31,10 @@ import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이�
 8. Labeling Bug fix : 임의의 노드 추가 시 Label이 안보이던 문제 해결
 [5.23]
 1. Hide 버튼 누르면 해당 node가 selectable이 false가 되던 문제 해결
+[5.27]
+1. delete DFS 구현 완료
+[5.29]
+1. main page 구현 완료
 */
 
 // [TODO LIST]

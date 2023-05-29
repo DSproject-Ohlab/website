@@ -16,9 +16,10 @@ import {
     IonRadio,
     IonCheckbox
 } from '@ionic/vue';
-import {ref} from 'vue';
+import {ref, reactive, onMounted} from 'vue';
 import {useRouter} from "vue-router";
 import axios from "axios";
+import Thumbnail from './Thumbnail.vue';
 
 const isOpen = ref(false);
 const category = ref("");
@@ -57,13 +58,17 @@ const onCheckboxChange = (checked, newCategory) => {
     }
 }
 
+
 </script>
 <template>
     <ion-page>
         <ion-content class="ion-padding">
-                <img src="../assets/home_image.png" alt="home_image">
-            <div class="startbutton">
-                <ion-button @click="setOpen(true)" size="Large">Start</ion-button>
+            <!-- <Thumbnail /> -->
+            <div class="image-container">
+                <img class="thumbnail" src="../assets/home_image.png" />
+                <div class="startbutton">
+                    <ion-button @click="setOpen(true)" size="Large">Start</ion-button>
+                </div>
             </div>
         <!-- Add more <img> tags for other images -->
         <ion-modal :is-open="isOpen">
@@ -103,7 +108,6 @@ const onCheckboxChange = (checked, newCategory) => {
                 <ion-title>MindView</ion-title>
             </ion-toolbar>
         </ion-header>
-
         <!-- <ion-content class="ion-padding"> -->
             <!-- <ion-button @click="send()">send</ion-button> -->
             <!-- <ion-button expand="block" @click="setOpen(true)">select</ion-button> -->
@@ -160,30 +164,37 @@ ion-radio.ios::part(container) {
     border-color: #6815ec;
   }
 
-.startbutton {
-position: absolute;
+/* .startbutton {
+    position: absolute;
     left: 17.5%;
     transform: translateX(-50%);
     bottom: 300px;
     font-size: 16px;
-    padding: 8px 16px;;
+    padding: 8px 16px;
+} */
+
+.image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.startbutton {
+  position: absolute;
+  left : 33.5vh;
+  bottom: 35vh;
+  transform: translateX(-50%);
 }
 
 .startbutton ion-button {
-    min-width: 120px;
-    min-height: 50px;
+  font-size: 1vw;
+  padding: 0.5vw 1vw;
+  min-width: 10vw;
+  min-height: 7vh;
 }
-/*   
-ion-button {
-  position: absolute;
-  left: 18.7%;
-  transform: translateX(-50%);
-  bottom: 320px;
-  font-size: 16px;
-  padding: 8px 16px;
-  min-width: 200px;
-  min-height: 50px;
-} */
+
+
 
 
 </style>

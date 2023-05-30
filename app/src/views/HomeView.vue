@@ -22,8 +22,8 @@ import axios from "axios";
 import Thumbnail from './Thumbnail.vue';
 
 const isOpen = ref(false);
-const category = ref('');
-const Centerword = ref('');
+let category = ref('');
+let Centerword = ref('');
 // const item = ref('');
 
 const setOpen = (value) => {
@@ -32,11 +32,6 @@ const setOpen = (value) => {
 
 const router = useRouter();
 
-// const selectItem = () => {
-//     console.log('selected item', item.value.$el.value);
-//     isOpen.value = false;
-//     router.push({name: "MindMap"});
-// }
 
 const selectItem = () => {
     console.log('selected category', category.value);
@@ -48,15 +43,10 @@ const selectItem = () => {
             category: category.value 
         }
     });
+    category.value = '';
+    Centerword.value = '';
 }
 
-
-// const send = () => {
-//     axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/brainstorming/', {withCredentials: true})
-//         .then((response) => {
-//             console.log(response);
-//         });
-// }
 
 const onCheckboxChange = (checked, newCategory) => {
     if (checked) {

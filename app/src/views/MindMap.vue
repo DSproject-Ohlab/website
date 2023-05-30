@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {reactive, ref, watch, computed, onMounted} from 'vue';
+import {reactive, ref, watch, computed, onMounted, onUpdated} from 'vue';
 import * as vNG from "v-network-graph";
 import "v-network-graph/lib/style.css";
 import {ForceLayout} from "v-network-graph/lib/force-layout";
@@ -47,8 +47,9 @@ import axios from "axios";
 // 2. Axios data 넘기기 - AddArbitraryNode 관련
 
 const router = useRouter();
-const Centerword = ref('');
-const category = ref('');
+let Centerword = ref('');
+let category = ref('');
+let choice_word = ref('');
 let recommended_item = ref('');
 
 
@@ -63,7 +64,7 @@ interface Edge extends vNG.Edge {
 }
 
 const nodes: reactive<Record<string, Node>> = reactive({
-    node1: {id: "node1" ,name: Centerword, selectable: true},
+    // node1: {id: "node1" ,name: Centerword, selectable: true},
     // node2: {id: "node2" ,name: "N2", selectable: false},
     // node3: {id: "node3" ,name: "N3", selectable: false},
     // node4: {id: "node4" ,name: "N4", selectable: false},
@@ -100,8 +101,10 @@ const layouts = ref({
     },
 })
 
-const nextNodeIndex = ref(Object.keys(nodes).length + 1);
-const nextEdgeIndex = ref(Object.keys(edges).length + 1);
+// const nextNodeIndex = ref(Object.keys(nodes).length + 1);
+// const nextEdgeIndex = ref(Object.keys(edges).length + 1);
+const nextNodeIndex = ref(2);
+const nextEdgeIndex = ref(1);
 
 const selectedNodes = ref<string[]>([]);
 const selectedEdges = ref<string[]>([]);
@@ -114,7 +117,8 @@ const allEdges = ref({...edges});
 // delete node button
 // const deleteMode = ref(false);
 
-onMounted(() => {
+// page 진입 시 Centerword send 및 추천 단어 받아오기
+onUpdated(() => {
     const query = router.currentRoute.value.query;
     if (query && query.Centerword) {
     Centerword.value = query.Centerword;
@@ -123,7 +127,9 @@ onMounted(() => {
     axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/center/' + category.value + '/' + Centerword.value, {withCredentials: true})
     .then((response) => {
         recommended_item = response.data;
-
+        nextNodeIndex.value = 2; // Reset the node index
+        nextEdgeIndex.value = 1; // Reset the edge index
+        nodes.node1 = { id: 'node1', name: Centerword.value, selectable: true };
         for (const i in recommended_item) {
             nodes['node' + nextNodeIndex.value] = {
                 id: 'node' + nextNodeIndex.value,
@@ -148,6 +154,31 @@ onMounted(() => {
     
 });
 
+
+// Item Select시 추천 단어 받아오기
+const selectItem = () => {
+    // console.log(choice_word)
+    axios.post('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/human/' + choice_word,{center_word : Centerword._value, user_type: category.value}, {withCredentials: true})
+    .then((response) => {
+        recommended_item = response.data;
+        for (const i in recommended_item) {
+            nodes['node' + nextNodeIndex.value] = {
+                id: 'node' + nextNodeIndex.value,
+                name: recommended_item[i],
+                selectable: false
+            };
+            edges['edge' + nextEdgeIndex.value] = {
+                source: 'node1',
+                target: 'node' + nextNodeIndex.value,
+                dashed: true,
+                color: "black",
+                selectable: true
+            };
+            nextNodeIndex.value++;
+            nextEdgeIndex.value++;
+        }
+    })
+}
 
 const selectEdge = () => {
     const selEdge = selectedEdges.value;
@@ -205,35 +236,17 @@ const selectEdge = () => {
     //         nodes[edges[e].target].selectable = true;
     //     }
     // }
-
     addNodes(targetNode[0]);
 }
 
 
-// const addNodes = () => {
-//     const source = selectedNodes.value[0];
-//     for (let i = 0; i < 10; i++) {
-//         const newNode = "node" + nextNodeIndex.value;
-//         const newEdge = "edge" + nextEdgeIndex.value;
-//         nodes[newNode] = {name: "N" + nextNodeIndex.value, selectable: false};
-//         edges[newEdge] = {source: source, target: newNode, color: "black", dashed: true, selectable: true};
-//         nextNodeIndex.value++;
-//         nextEdgeIndex.value++;
-//     }
-// }
-
 // selectEdge랑 묶이는 addNode 함수
 const addNodes = (target : string) => {
     // const source = selectedNodes.value[0];
-    for (let i = 0; i < 10; i++) {
-        const newNode = "node" + nextNodeIndex.value;
-        const newEdge = "edge" + nextEdgeIndex.value;
-        nodes[newNode] = {name: "N" + nextNodeIndex.value, selectable: true};
-        edges[newEdge] = {source: target, target: newNode, color: "black", dashed: true, selectable: true};
-        nextNodeIndex.value++;
-        nextEdgeIndex.value++;
-    }
+    choice_word = nodes[target].name;
+    selectItem();
 }
+
 
 // 임의로 생성된 노드에 채워넣을 라벨
 const newNodeLabel = ref("");
@@ -452,7 +465,16 @@ const configs = reactive(vNG.defineConfigs<Node, Edge>({
 }))
 
 const toHome = () => {
-    router.push({name: "Home"});
+    Centerword.value = '';
+    category.value = '';
+    choice_word.value = '';
+    recommended_item.value = '';
+    router.push({name: "Home",
+    query: {
+            Centerword: Centerword.value,
+            category: category.value
+        }
+});
 }
 </script>
 

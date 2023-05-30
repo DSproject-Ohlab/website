@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "@ionic/vue-router";
+import { createRouter, createWebHistory, createWebHashHistory } from "@ionic/vue-router";
 import HomeView from '../views/HomeView.vue'
 import MindMap from "../views/MindMap.vue";
 
@@ -11,19 +11,21 @@ const routes = [
     {
         path: '/home',
         name: 'Home',
-        component: HomeView
+        component: HomeView,
     },
     {
         path: '/mindmap',
         name: 'MindMap',
-        component: MindMap
+        component: MindMap,
     }
 ]
 
 const router = createRouter({
     base: '/',
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes,
 })
+
+
 
 export default router;

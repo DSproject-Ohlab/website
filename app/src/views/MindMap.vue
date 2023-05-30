@@ -43,6 +43,10 @@ import axios from "axios";
 1. 백단 잇는 작업
     - selected_word 삭제 : 백단에서 처리
 2. Redirection 시 라벨 새로고침 bugfix
+[5.31]
+1. 백단 잇는 작업
+    - choice_word 반영
+    - recommend, add select 함수에 해당 사항 반영 완료
 */
 
 // [TODO LIST]

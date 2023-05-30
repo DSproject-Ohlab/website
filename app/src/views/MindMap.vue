@@ -39,6 +39,10 @@ import axios from "axios";
 [5.29]
 1. main page image css로 변환
 2. Centerword update
+[5.30]
+1. 백단 잇는 작업
+    - selected_word 삭제 : 백단에서 처리
+2. Redirection 시 라벨 새로고침 bugfix
 */
 
 // [TODO LIST]
@@ -155,30 +159,45 @@ onUpdated(() => {
 });
 
 
-// Item Select시 추천 단어 받아오기
-const selectItem = () => {
-    // console.log(choice_word)
-    axios.post('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/human/' + choice_word,{center_word : Centerword._value, user_type: category.value}, {withCredentials: true})
+// // Item Select시 추천 단어 받아오기
+// const selectItem = () => {
+//     // console.log(choice_word)
+//     axios.post('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/human/' + choice_word,{selected_words : [], center_word : Centerword._value, user_type: category.value}, {withCredentials: true})
+//     .then((response) => {
+//         recommended_item = response.data;
+//         for (const i in recommended_item) {
+//             nodes['node' + nextNodeIndex.value] = {
+//                 id: 'node' + nextNodeIndex.value,
+//                 name: recommended_item[i],
+//                 selectable: false
+//             };
+//             edges['edge' + nextEdgeIndex.value] = {
+//                 source: 'node1',
+//                 target: 'node' + nextNodeIndex.value,
+//                 dashed: true,
+//                 color: "black",
+//                 selectable: true
+//             };
+//             nextNodeIndex.value++;
+//             nextEdgeIndex.value++;
+//         }
+//     })
+// }
+
+const selectItem = (node) => {
+  axios.post('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/human/' + choice_word, {center_word: Centerword.value, user_type: category.value }, { withCredentials: true })
     .then((response) => {
-        recommended_item = response.data;
-        for (const i in recommended_item) {
-            nodes['node' + nextNodeIndex.value] = {
-                id: 'node' + nextNodeIndex.value,
-                name: recommended_item[i],
-                selectable: false
-            };
-            edges['edge' + nextEdgeIndex.value] = {
-                source: 'node1',
-                target: 'node' + nextNodeIndex.value,
-                dashed: true,
-                color: "black",
-                selectable: true
-            };
-            nextNodeIndex.value++;
-            nextEdgeIndex.value++;
-        }
-    })
-}
+      recommended_item = response.data;
+      for (const i in recommended_item) {
+        const newNodeId = `node${nextNodeIndex.value}`;
+        const newEdgeId = `edge${nextEdgeIndex.value}`;
+        nodes[newNodeId] = { id: newNodeId, name: recommended_item[i], selectable: false };
+        edges[newEdgeId] = { source: node.id, target: newNodeId, dashed: true, color: "black", selectable: true };
+        nextNodeIndex.value++;
+        nextEdgeIndex.value++;
+      }
+    });
+};
 
 const selectEdge = () => {
     const selEdge = selectedEdges.value;
@@ -236,36 +255,61 @@ const selectEdge = () => {
     //         nodes[edges[e].target].selectable = true;
     //     }
     // }
-    addNodes(targetNode[0]);
+
+    // addNodes(targetNode[0]);
+    if (targetNode.length > 0) {
+        addNodes(targetNode[0]);
+    }
 }
 
 
 // selectEdge랑 묶이는 addNode 함수
 const addNodes = (target : string) => {
     // const source = selectedNodes.value[0];
-    choice_word = nodes[target].name;
-    selectItem();
+    const node = nodes[target];
+    if (node) {
+        choice_word = node.name;
+    selectItem(node);
+  }
 }
 
 
 // 임의로 생성된 노드에 채워넣을 라벨
 const newNodeLabel = ref("");
-const addarbitraryNodes = () => {
-    if (selectedNodes.value.length > 0) {
-        const source = selectedNodes.value[0];
-        const newNode = "node" + nextNodeIndex.value;
-        const newEdge = "edge" + nextEdgeIndex.value;
-        // nodes[newNode] = {name: "N" + nextNodeIndex.value, selectable: true};
-        nodes[newNode] = {name: newNodeLabel.value , selectable: true};
-        edges[newEdge] = {source: source, target: newNode, color: "blue", dashed: false, selectable: true};
-        nextNodeIndex.value++;
-        nextEdgeIndex.value++;
-        nextTick(() => {
-            newNodeLabel.value = ""; // reset the label input
-        });
-    }
-}
-
+// const addarbitraryNodes = () => {
+//     if (selectedNodes.value.length > 0) {
+//         const source = selectedNodes.value[0];
+//         const newNode = "node" + nextNodeIndex.value;
+//         const newEdge = "edge" + nextEdgeIndex.value;
+//         // nodes[newNode] = {name: "N" + nextNodeIndex.value, selectable: true};
+//         nodes[newNode] = {name: newNodeLabel.value , selectable: true};
+//         edges[newEdge] = {source: source, target: newNode, color: "blue", dashed: false, selectable: true};
+//         nextNodeIndex.value++;
+//         nextEdgeIndex.value++;
+//         choice_word = newNodeLabel.value;
+//         selectItem();
+//         console.log(choice_word)
+//         nextTick(() => {
+//             newNodeLabel.value = ""; // reset the label input
+//         });
+//     }
+// }
+const addarbitraryNodes = (target) => {
+  if (target) {
+    const source = selectedNodes.value[0];
+    const newNodeId = `node${nextNodeIndex.value}`;
+    const newEdgeId = `edge${nextEdgeIndex.value}`;
+    nodes[newNodeId] = { id: newNodeId, name: target, selectable: true };
+    edges[newEdgeId] = { source: source, target: newNodeId, color: "blue", dashed: false, selectable: true };
+    nextNodeIndex.value++;
+    nextEdgeIndex.value++;
+    choice_word = target;
+    selectItem(nodes[newNodeId]);
+    nextTick(() => {
+      newNodeLabel.value = ""; // reset the label input
+    });
+  }
+};
 
 
 // // function for delete node
@@ -330,14 +374,17 @@ const deleteNode = () => {
 const recommend = () => {
   const source = selectedNodes.value[0];
   if (source) {
-    for (let i = 0; i < 10; i++) {
-      const newNode = "node" + nextNodeIndex.value;
-      const newEdge = "edge" + nextEdgeIndex.value;
-      nodes[newNode] = { id: newNode, name: "N" + nextNodeIndex.value, selectable: true };
-      edges[newEdge] = { source: source, target: newNode, color: "black", dashed: true, selectable: true };
-      nextNodeIndex.value++;
-      nextEdgeIndex.value++;
-    }
+    // for (let i = 0; i < 10; i++) {
+    //   const newNode = "node" + nextNodeIndex.value;
+    //   const newEdge = "edge" + nextEdgeIndex.value;
+    //   nodes[newNode] = { id: newNode, name: "N" + nextNodeIndex.value, selectable: true };
+    //   edges[newEdge] = { source: source, target: newNode, color: "black", dashed: true, selectable: true };
+    //   nextNodeIndex.value++;
+    //   nextEdgeIndex.value++;
+    // }
+    choice_word = nodes[source].name;
+    selectItem(nodes[source]);
+    console.log(choice_word)
   }
 };
 
@@ -465,10 +512,10 @@ const configs = reactive(vNG.defineConfigs<Node, Edge>({
 }))
 
 const toHome = () => {
-    Centerword.value = '';
-    category.value = '';
-    choice_word.value = '';
-    recommended_item.value = '';
+    // Centerword.value = '';
+    // category.value = '';
+    // choice_word.value = '';
+    // recommended_item.value = '';
     router.push({name: "Home",
     query: {
             Centerword: Centerword.value,
@@ -491,10 +538,7 @@ const toHome = () => {
             <ion-button :disabled="selectedNodes.length == 0" @click="recommend()">Recommend</ion-button>
             <ion-button :disabled="selectedNodes.length == 0" @click="hideUnselected(selectedNodes[0])">Hide</ion-button>
             <ion-input v-model="newNodeLabel" placeholder="Enter new node label"></ion-input>
-            <!-- <ion-input :value="newNodeLabel.value" @input="newNodeLabel.value = $event.target.value" placeholder="Enter new node label"></ion-input> -->
-            <!-- <ion-input v-model="newNodeLabelComputed" placeholder="Enter new node label"></ion-input> -->
-            <ion-button :disabled="selectedNodes.length == 0 || newNodeLabel.value == ''" @click="addarbitraryNodes()">Add</ion-button>
-            <!-- <ion-button :disabled="selectedNodes.length == 0" @click="addNodes()">Add</ion-button> -->
+            <ion-button :disabled="selectedNodes.length == 0 || newNodeLabel.value == ''" @click="addarbitraryNodes(newNodeLabel)">Add</ion-button>
             <ion-button :disabled="selectedNodes.length == 0" @click="deleteNode()">Delete</ion-button>
             <ion-button @click="toHome">Home</ion-button>
             <v-network-graph ref="graph" v-model:selected-edges="selectedEdges" v-model:selected-nodes="selectedNodes"

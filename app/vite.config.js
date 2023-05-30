@@ -12,7 +12,7 @@ export default defineConfig({
     strictPort: true,
     port: 5173
   },
-  base: '/gsdsproject.github.io/',
+  base: '/',
   build: {
     outDir: 'dist',
     rollupOptions: {

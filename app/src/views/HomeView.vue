@@ -59,14 +59,39 @@ const onCheckboxChange = (checked, newCategory) => {
 <template>
     <ion-page>
         <ion-content class="ion-padding">
-            <!-- <Thumbnail /> -->
-            <div class="image-container">
-                <img class="thumbnail" src="../assets/home_image.png" />
+            <div class="thumbnail">
+                <div class="rectangle-5"></div>
+
+                <div class="version-1-0">Version 1.0</div>
+
+                <div class="build-your-mindmap">Build your Mindmap</div>
+
+                <div
+                class="get-inspiration-with-our-recommendation-very-easy-to-use-no-login-or-registration-required"
+                >
+                Get inspiration with our recommendation!<br />Very easy to use.<br />No
+                login or registration required.
+                </div>
+
+                <img class="asset-4-1" src="../assets/Asset_4_1.png"/>
+
+                <img class="email-template-1" src="../assets/Email_Template_1.png"/>
+
+                <img class="email-template-1-1" src="../assets/EmailTemplate-1_1.png"/>
+
+                <img class="rectangle-2" src="../assets/Rectangle_2.png"/>
+
+                <img class="image-1" src="../assets/image_1.png"/>
+                
                 <div class="startbutton">
                     <ion-button @click="setOpen(true)" size="Large">Start</ion-button>
                 </div>
             </div>
-        <!-- Add more <img> tags for other images -->
+            <!-- <div class="image-container">
+                <div class="startbutton">
+                    <ion-button @click="setOpen(true)" size="Large">Start</ion-button>
+                </div>
+            </div> -->
         <ion-modal :is-open="isOpen">
                 <ion-header>
                     <ion-toolbar>
@@ -183,8 +208,8 @@ ion-radio.ios::part(container) {
 
 .startbutton {
   position: absolute;
-  left : 33.5vh;
-  bottom: 35vh;
+  left : 13vw;
+  top  : 30vw;
   transform: translateX(-50%);
 }
 
@@ -195,5 +220,105 @@ ion-radio.ios::part(container) {
   min-height: 7vh;
 }
 
-
+/* 배경 이미지 */
+.thumbnail,
+.thumbnail * {
+  box-sizing: border-box;
+}
+.thumbnail {
+  background: #ffffff;
+  width: 111vw;
+  height: 50vw;
+  position: relative;
+  overflow: hidden;
+}
+.rectangle-5 {
+  background: #f8f8f8;
+  width: 111vw;
+  height: 6vw;
+  position: absolute;
+  left: 5vw;
+  top: 40vw;
+}
+.version-1-0 {
+  color: #000000;
+  text-align: left;
+  font: 400 1.3vw/150% "Roboto Mono", sans-serif;
+  text-transform: uppercase;
+  position: absolute;
+  left: 9vw;
+  top: 42vw;
+}
+.build-your-mindmap {
+  color: #000000;
+  text-align: left;
+  font: 800 3.6vw/115% "Public Sans", sans-serif;
+  position: absolute;
+  left: 9vw;
+  top: 13.5vw;
+  width: 25vw;
+}
+.asset-4-1 {
+  width: 1.3vw;
+  height: 3.5vw;
+  position: absolute;
+  left: 87vw;
+  top: 5vw;
+  overflow: hidden;
+}
+.layer-1-2 {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  overflow: visible;
+}
+.get-inspiration-with-our-recommendation-very-easy-to-use-no-login-or-registration-required {
+  color: var(--colors-neutrals-graycool-gray-cool-90, #1b1b1b);
+  text-align: left;
+  font: var(--h-3-bold-22, 700 22px/145% "Public Sans", sans-serif);
+  position: absolute;
+  left: 9vw;
+  top: 22.3vw;
+  width: 38vw;
+}
+.email-template-1 {
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #000000;
+  border-width: 0.5px;
+  width: 455px;
+  height: 758px;
+  position: absolute;
+  left: 726px;
+  top: 171px;
+}
+.email-template-1-1 {
+  border-radius: 8px;
+  border-style: solid;
+  border-color: #000000;
+  border-width: 0.5px;
+  width: 216px;
+  height: 785px;
+  position: absolute;
+  left: 1051px;
+  top: 271px;
+}
+.rectangle-2 {
+  border-radius: 4px;
+  border-style: solid;
+  border-color: #000000;
+  border-width: 0.5px;
+  width: 218px;
+  height: 637px;
+  position: absolute;
+  left: 1249px;
+  top: 115px;
+}
+.image-1 {
+  width: 8vw;
+  height: 8vw;
+  position: absolute;
+  left: 9vw;
+  top: 5.1vw;
+}
 </style>

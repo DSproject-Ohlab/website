@@ -20,7 +20,7 @@ import {ref, reactive, onMounted} from 'vue';
 import {useRouter} from "vue-router";
 import axios from "axios";
 import Thumbnail from './Thumbnail.vue';
-
+.
 const isOpen = ref(false);
 let category = ref('');
 let Centerword = ref('');

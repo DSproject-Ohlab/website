@@ -57,7 +57,7 @@ import axios from "axios";
 // 1. Delete Node - 마지막 노드에 대해서만 삭제 가능, 
 //                  좀 더 딥한 node는 DFS로 Recursive하게 구현해야되는데 이건 논의 해보고 구현 결정
 // 2. Axios data 넘기기 - AddArbitraryNode 관련
-
+.
 const router = useRouter();
 let Centerword = ref('');
 let category = ref('');

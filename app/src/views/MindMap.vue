@@ -47,6 +47,10 @@ import axios from "axios";
 1. 백단 잇는 작업
     - choice_word 반영
     - recommend, add select 함수에 해당 사항 반영 완료
+[6.1]
+1. Homeview CSS로 변환
+[6.3]
+1. bugfix - redirection 시 노드/엣지 초기화
 */
 
 // [TODO LIST]
@@ -132,6 +136,15 @@ onUpdated(() => {
     Centerword.value = query.Centerword;
     }
     category.value = query.category;
+    for (const nodeId in nodes) {
+    // if (nodeId !== "node1") {
+        delete nodes[nodeId];
+        // }
+    }
+    // Delete previous edges
+    for (const edgeId in edges) {
+        delete edges[edgeId];
+    }
     axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/center/' + category.value + '/' + Centerword.value, {withCredentials: true})
     .then((response) => {
         recommended_item = response.data;

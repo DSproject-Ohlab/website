@@ -321,4 +321,32 @@ ion-radio.ios::part(container) {
   left: 9vw;
   top: 5.1vw;
 }
+
+@media (max-width: 600px) {
+    .thumbnail {
+        width: 100vw;
+        height: 100vh;
+    }
+    .startbutton {
+        position: absolute;
+        left: 50%;
+        top: 80vh;
+    }
+    .startbutton ion-button {
+        font-size: 4vw;
+        padding: 2vw 4vw;
+    }
+    .version-1-0 {
+        font-size: 4vw;
+    }
+    .build-your-mindmap {
+        font-size: 8vw;
+    }
+    .get-inspiration-with-our-recommendation-very-easy-to-use-no-login-or-registration-required {
+        font-size: 5vw;
+        width: 80vw;
+    }
+    /* Add similar modifications for other elements */
+}
+
 </style>

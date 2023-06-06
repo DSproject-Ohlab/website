@@ -563,7 +563,7 @@ const toHome = () => {
     <ion-page>
         <ion-header :translucent="true">
             <ion-toolbar>
-                <ion-title>Mindmap</ion-title>
+                <ion-title>ViewMind</ion-title>
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">

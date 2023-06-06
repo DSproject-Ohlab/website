@@ -131,7 +131,7 @@ const onCheckboxChange = (checked, newCategory) => {
         </ion-content>
         <ion-header :translucent="true">
             <ion-toolbar>
-                <ion-title>MindView</ion-title>
+                <ion-title>ViewMind</ion-title>
             </ion-toolbar>
         </ion-header>
         <!-- <ion-content class="ion-padding"> -->
@@ -329,22 +329,39 @@ ion-radio.ios::part(container) {
     }
     .startbutton {
         position: absolute;
-        left: 50%;
-        top: 80vh;
+        left: 50vw;
+        top: 40vh;
     }
     .startbutton ion-button {
         font-size: 4vw;
         padding: 2vw 4vw;
     }
+    .image-1 {
+        width: 15vw;
+        height: 15vw;
+        position: absolute;
+        left: 9vw;
+        top: 5.1vw;
+    }
     .version-1-0 {
         font-size: 4vw;
+        top : 60vh;
+    }
+    .rectangle-5 {
+        top : 60vh;
     }
     .build-your-mindmap {
         font-size: 8vw;
+        top : 12vh;
+        width : 50vw;
+    }
+    .asset-4-1 {
+        display : none;
     }
     .get-inspiration-with-our-recommendation-very-easy-to-use-no-login-or-registration-required {
-        font-size: 5vw;
+        font-size: 4vw;
         width: 80vw;
+        top : 23vh;
     }
     /* Add similar modifications for other elements */
 }

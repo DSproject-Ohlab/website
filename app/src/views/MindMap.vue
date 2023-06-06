@@ -4,7 +4,10 @@ import * as vNG from "v-network-graph";
 import "v-network-graph/lib/style.css";
 import {ForceLayout} from "v-network-graph/lib/force-layout";
 import {VNetworkGraph} from "v-network-graph";
-import {IonPage} from "@ionic/vue";
+import {
+    IonPage,
+    IonHeader, IonToolbar, IonContent, IonButton, IonTitle
+} from "@ionic/vue";
 import {useRouter} from "vue-router";
 import {nextTick} from "vue"; // labeling을 위한 라이브러리 임포트
 import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이브러리 임포트
@@ -63,6 +66,7 @@ let Centerword = ref('');
 let category = ref('');
 let choice_word = ref('');
 let recommended_item = ref('');
+let user_id = ref('');
 
 
 interface Node extends vNG.Node {
@@ -147,10 +151,11 @@ onUpdated(() => {
     }
     axios.get('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/center/' + category.value + '/' + Centerword.value, {withCredentials: true})
     .then((response) => {
-        recommended_item = response.data;
+        recommended_item = response.data.recommended_words;
+        user_id = response.data.user_id;
         nextNodeIndex.value = 2; // Reset the node index
         nextEdgeIndex.value = 1; // Reset the edge index
-        nodes.node1 = { id: 'node1', name: Centerword.value, selectable: true };
+        nodes.node1 = {id: 'node1', name: Centerword.value, selectable: true};
         for (const i in recommended_item) {
             nodes['node' + nextNodeIndex.value] = {
                 id: 'node' + nextNodeIndex.value,
@@ -201,18 +206,31 @@ onUpdated(() => {
 //     })
 // }
 
+const getCookie = () => {
+    const value = `; ${document.cookie}`;
+    return value;
+}
+
 const selectItem = (node) => {
-  axios.post('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/human/' + choice_word, {center_word: Centerword.value, user_type: category.value }, { withCredentials: true })
-    .then((response) => {
-      recommended_item = response.data;
-      for (const i in recommended_item) {
-        const newNodeId = `node${nextNodeIndex.value}`;
-        const newEdgeId = `edge${nextEdgeIndex.value}`;
-        nodes[newNodeId] = { id: newNodeId, name: recommended_item[i], selectable: false };
-        edges[newEdgeId] = { source: node.id, target: newNodeId, dashed: true, color: "black", selectable: true };
-        nextNodeIndex.value++;
-        nextEdgeIndex.value++;
-      }
+    axios.post('https://gsdsproject-github-io-iaqun7cvsa-du.a.run.app/word/human/' + choice_word, {
+            center_word: Centerword.value,
+            user_type: category.value,
+            user_id: user_id
+        },
+        {withCredentials: true})
+        .then((response) => {
+
+            recommended_item = response.data.recommended_words;
+            for (const i in recommended_item) {
+                const newNodeId = `node${nextNodeIndex.value}`;
+                const newEdgeId = `edge${nextEdgeIndex.value}`;
+                nodes[newNodeId] = {id: newNodeId, name: recommended_item[i], selectable: false};
+                edges[newEdgeId] = {source: node.id, target: newNodeId, dashed: true, color: "black", selectable: true};
+                nextNodeIndex.value++;
+                nextEdgeIndex.value++;
+            }
+        }).catch((e) => {
+        console.error(e);
     });
 };
 

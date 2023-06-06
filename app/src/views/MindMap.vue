@@ -56,6 +56,7 @@ import axios from "axios";
 1. bugfix - redirection 시 노드/엣지 초기화
 [6.6]
 1. Mobile View Update
+2. 네이밍 수정 : Mindmap -> ViewMind
 */
 
 

@@ -26,6 +26,7 @@ let category = ref('');
 let Centerword = ref('');
 // const item = ref('');
 
+
 const setOpen = (value) => {
     isOpen.value = value;
 }
@@ -125,7 +126,7 @@ const onCheckboxChange = (checked, newCategory) => {
                             <ion-label position="stacked">Enter your Root Idea</ion-label>
                             <ion-input v-model="Centerword"></ion-input>
                         </ion-item>
-                        <ion-button expand="Default" @click="selectItem()">Enter</ion-button>
+                        <ion-button expand="Default" @click="selectItem()" :disabled="!category">Enter</ion-button>
                 </ion-content>
             </ion-modal>
         </ion-content>

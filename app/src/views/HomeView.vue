@@ -85,7 +85,7 @@ const onCheckboxChange = (checked, newCategory) => {
                 <!-- <img class="main_image" src="../assets/designer.mov"/> -->
 
                 <video class="main_video" autoplay loop>
-                    <source src="../assets/designer.mov" type="video/mp4">
+                    <source src="../assets/designer2.mp4" type="video/mp4">
                     <!-- Add additional source tags for different video formats if needed -->
                 </video>
 
@@ -269,11 +269,12 @@ ion-radio.ios::part(container) {
 
 .main_video {
   width: 50vw;
+  /* height : auto; */
   height: 35vw;
-  object-fit: contain;
+  object-fit: cover;
   position : absolute;
   left: 61vw;
-  top: 21.5vw;
+  top: 21vw;
   transform: translate(-50%, -50%);
 }
 
@@ -282,7 +283,7 @@ ion-radio.ios::part(container) {
   height: 3.5vw;
   position: absolute;
   left: 87vw;
-  top: 5vw;
+  top: 3.7vw;
   overflow: hidden;
 }
 .layer-1-2 {

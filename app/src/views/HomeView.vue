@@ -76,11 +76,18 @@ const onCheckboxChange = (checked, newCategory) => {
 
                 <img class="asset-4-1" src="../assets/Asset_4_1.png"/>
 
-                <img class="email-template-1" src="../assets/Email_Template_1.png"/>
+                <!-- <img class="email-template-1" src="../assets/Email_Template_1.png"/> -->
 
-                <img class="email-template-1-1" src="../assets/EmailTemplate-1_1.png"/>
+                <!-- <img class="email-template-1-1" src="../assets/EmailTemplate-1_1.png"/> -->
 
-                <img class="rectangle-2" src="../assets/Rectangle_2.png"/>
+                <!-- <img class="rectangle-2" src="../assets/Rectangle_2.png"/> -->
+
+                <!-- <img class="main_image" src="../assets/designer.mov"/> -->
+
+                <video class="main_video" autoplay loop>
+                    <source src="../assets/designer.mov" type="video/mp4">
+                    <!-- Add additional source tags for different video formats if needed -->
+                </video>
 
                 <img class="image-1" src="../assets/image_1.png"/>
                 
@@ -259,6 +266,17 @@ ion-radio.ios::part(container) {
   top: 13.5vw;
   width: 25vw;
 }
+
+.main_video {
+  width: 50vw;
+  height: 35vw;
+  object-fit: contain;
+  position : absolute;
+  left: 61vw;
+  top: 21.5vw;
+  transform: translate(-50%, -50%);
+}
+
 .asset-4-1 {
   width: 1.3vw;
   height: 3.5vw;
@@ -276,7 +294,7 @@ ion-radio.ios::part(container) {
 .get-inspiration-with-our-recommendation-very-easy-to-use-no-login-or-registration-required {
   color: var(--colors-neutrals-graycool-gray-cool-90, #1b1b1b);
   text-align: left;
-  font: var(--h-3-bold-22, 700 22px/145% "Public Sans", sans-serif);
+  font: var(--h-3-bold-22, 700 1.2vw/145% "Public Sans", sans-serif);
   position: absolute;
   left: 9vw;
   top: 22.3vw;
@@ -331,7 +349,7 @@ ion-radio.ios::part(container) {
     .startbutton {
         position: absolute;
         left: 50vw;
-        top: 40vh;
+        top: 38vh;
     }
     .startbutton ion-button {
         font-size: 4vw;
@@ -344,12 +362,21 @@ ion-radio.ios::part(container) {
         left: 9vw;
         top: 5.1vw;
     }
+    .main_video {
+        position: absolute;
+        left: 50%;
+        top: 65vh;
+        transform: translate(-50%, -50%);
+        width: 80vw;
+        height: 80vw;
+        object-fit: contain;
+    }
     .version-1-0 {
         font-size: 4vw;
-        top : 60vh;
+        top : 85vh;
     }
     .rectangle-5 {
-        top : 60vh;
+        top : 85vh;
     }
     .build-your-mindmap {
         font-size: 8vw;

@@ -60,6 +60,9 @@ import axios from "axios";
 2. 네이밍 수정 : Mindmap -> ViewMind
 [6.8]
 1. Category 클릭해야만 다음 페이지로 넘어가게 수정
+[6.9]
+1. multiple choice 기능 추가
+2. main 화면 업데이트
 */
 
 

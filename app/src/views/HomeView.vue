@@ -84,7 +84,7 @@ const onCheckboxChange = (checked, newCategory) => {
 
                 <!-- <img class="main_image" src="../assets/designer.mov"/> -->
 
-                <video class="main_video" autoplay loop>
+                <video class="main_video" autoplay loop playsinline>
                     <source src="../assets/designer2.mp4" type="video/mp4">
                     <!-- Add additional source tags for different video formats if needed -->
                 </video>

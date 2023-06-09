@@ -345,7 +345,7 @@ ion-radio.ios::part(container) {
 @media (max-width: 600px) {
     .thumbnail {
         width: 100vw;
-        height: 100vh;
+        height: 105vh;
     }
     .startbutton {
         position: absolute;
@@ -366,18 +366,19 @@ ion-radio.ios::part(container) {
     .main_video {
         position: absolute;
         left: 50%;
-        top: 65vh;
+        top: 72vh;
         transform: translate(-50%, -50%);
-        width: 80vw;
+        width: 100vw;
         height: 80vw;
-        object-fit: contain;
+        object-fit: cover;
     }
     .version-1-0 {
         font-size: 4vw;
-        top : 85vh;
+        top : 100vh;
     }
     .rectangle-5 {
-        top : 85vh;
+        top : 100vh;
+        height : 4vh;
     }
     .build-your-mindmap {
         font-size: 8vw;

@@ -113,8 +113,8 @@ const edges: reactive<Record<string, Edge>> = reactive({
 const layouts = ref({
     nodes: {
         node1: {
-            x: 0,
-            y: 0,
+            x: 50,
+            y: 50,
             fixed: true,
         },
     },

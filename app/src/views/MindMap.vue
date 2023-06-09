@@ -13,6 +13,7 @@ import {nextTick} from "vue"; // labeling을 위한 라이브러리 임포트
 import {IonModal, IonInput} from "@ionic/vue";  // label input을 위한 라이브러리 임포트
 import axios from "axios"; 
 
+
 // 1. Node 지워진거 다시 살리기 - difficult...
 //      - Delete Mode?
 //      - 
@@ -57,6 +58,8 @@ import axios from "axios";
 [6.6]
 1. Mobile View Update
 2. 네이밍 수정 : Mindmap -> ViewMind
+[6.8]
+1. Category 클릭해야만 다음 페이지로 넘어가게 수정
 */
 
 
@@ -245,20 +248,6 @@ const selectEdge = () => {
         }
     }
 
-    // for (const e in edges) {
-    //     if ((targetNode.indexOf(edges[e].target) < 0) && edges[e].source == sourceNode) {
-    //         // delete node and edge
-    //         delete nodes[edges[e].target]
-    //         delete edges[e]
-    //     } else if (edges[e].source == sourceNode) {
-    //         edges[e].dashed = false;
-    //         edges[e].color = "blue";
-    //         edges[e].selectable = false;
-    //         nodes[edges[e].source].selectable = false;
-    //         nodes[edges[e].target].selectable = true;
-    //     }
-    // }
-
     for (const e in edges) {
         if ((targetNode.indexOf(edges[e].target) < 0) && edges[e].source == sourceNode) {
             // delete node and edge
@@ -274,26 +263,12 @@ const selectEdge = () => {
     }
 
 
-        
-    // 노드 edge 안지우고 남김 -> multipl choice 가능할듯
-    // for (const e in edges) {
-    //     if ((targetNode.indexOf(edges[e].target) >= 0) && edges[e].source == sourceNode) {
-    //         // delete node and edge
-    //         if (deleteMode.value) {
-    //             delete nodes[edges[e].target]
-    //             delete edges[e]
-    //         }
-    //         edges[e].dashed = false;
-    //         edges[e].color = "blue";
-    //         edges[e].selectable = false;
-    //         nodes[edges[e].source].selectable = false;
-    //         nodes[edges[e].target].selectable = true;
-    //     }
-    // }
-
-    // addNodes(targetNode[0]);
     if (targetNode.length > 0) {
-        addNodes(targetNode[0]);
+        // multiple choice
+        for(const i in targetNode) {
+            addNodes(targetNode[i]);
+        }
+        // addNodes(targetNode[0]);
     }
 }
 
@@ -334,7 +309,7 @@ const addarbitraryNodes = (target) => {
     const source = selectedNodes.value[0];
     const newNodeId = `node${nextNodeIndex.value}`;
     const newEdgeId = `edge${nextEdgeIndex.value}`;
-    nodes[newNodeId] = { id: newNodeId, name: target, selectable: true };
+    nodes[newNodeId] = { id: newNodeId, name: target, selectable: true};
     edges[newEdgeId] = { source: source, target: newNodeId, color: "blue", dashed: false, selectable: true };
     nextNodeIndex.value++;
     nextEdgeIndex.value++;
@@ -375,73 +350,123 @@ const addarbitraryNodes = (target) => {
 // }
 
 // function for delete node
+// const deleteNode = () => {
+//     if (selectedNodes.value.length > 0) {
+//         const nodeToDelete = selectedNodes.value[0];
+
+//         const deleteNodeAndEdges = (nodeId) => {
+//             // Remove the target node associated with the edges
+//             for (const edge in edges) {
+//                 if (edges[edge].source === nodeId) {
+//                     const targetNode = edges[edge].target;
+//                     delete nodes[targetNode];
+//                     deleteNodeAndEdges(targetNode); // Recursively delete children nodes
+//                 }
+//             }
+//             // Remove the associated edges
+//             for (const edge in edges) {
+//                 if (edges[edge].source === nodeId || edges[edge].target === nodeId) {
+//                     delete edges[edge];
+//                 }
+//             }
+//             // Remove the node
+//             delete nodes[nodeId];
+//         };
+
+//         deleteNodeAndEdges(nodeToDelete);
+
+//         // Reset the selectedNodes array
+//         selectedNodes.value = [];
+//     }
+// }
 const deleteNode = () => {
-    if (selectedNodes.value.length > 0) {
-        const nodeToDelete = selectedNodes.value[0];
+  for (const selectedNode of selectedNodes.value) {
+    const deleteNodeAndEdges = (nodeId) => {
+      for (const edgeId in edges) {
+        const edge = edges[edgeId];
+        if (edge.source === nodeId) {
+          const targetNode = edge.target;
+          delete nodes[targetNode];
+          deleteNodeAndEdges(targetNode); // Recursively delete children nodes
+        }
+      }
+      for (const edgeId in edges) {
+        if (edges[edgeId].source === nodeId || edges[edgeId].target === nodeId) {
+          delete edges[edgeId];
+        }
+      }
+      delete nodes[nodeId];
+    };
+    deleteNodeAndEdges(selectedNode);
+  }
+  selectedNodes.value = [];
+};
 
-        const deleteNodeAndEdges = (nodeId) => {
-            // Remove the target node associated with the edges
-            for (const edge in edges) {
-                if (edges[edge].source === nodeId) {
-                    const targetNode = edges[edge].target;
-                    delete nodes[targetNode];
-                    deleteNodeAndEdges(targetNode); // Recursively delete children nodes
-                }
-            }
-            // Remove the associated edges
-            for (const edge in edges) {
-                if (edges[edge].source === nodeId || edges[edge].target === nodeId) {
-                    delete edges[edge];
-                }
-            }
-            // Remove the node
-            delete nodes[nodeId];
-        };
 
-        deleteNodeAndEdges(nodeToDelete);
-
-        // Reset the selectedNodes array
-        selectedNodes.value = [];
-    }
-}
 
 // Recommend function
+// const recommend = () => {
+//   const source = selectedNodes.value[0];
+//   if (source) {
+//     // for (let i = 0; i < 10; i++) {
+//     //   const newNode = "node" + nextNodeIndex.value;
+//     //   const newEdge = "edge" + nextEdgeIndex.value;
+//     //   nodes[newNode] = { id: newNode, name: "N" + nextNodeIndex.value, selectable: true };
+//     //   edges[newEdge] = { source: source, target: newNode, color: "black", dashed: true, selectable: true };
+//     //   nextNodeIndex.value++;
+//     //   nextEdgeIndex.value++;
+//     // }
+//     choice_word = nodes[source].name;
+//     selectItem(nodes[source]);
+//     console.log(choice_word)
+//   }
+// };
+// multiple choice
 const recommend = () => {
-  const source = selectedNodes.value[0];
-  if (source) {
-    // for (let i = 0; i < 10; i++) {
-    //   const newNode = "node" + nextNodeIndex.value;
-    //   const newEdge = "edge" + nextEdgeIndex.value;
-    //   nodes[newNode] = { id: newNode, name: "N" + nextNodeIndex.value, selectable: true };
-    //   edges[newEdge] = { source: source, target: newNode, color: "black", dashed: true, selectable: true };
-    //   nextNodeIndex.value++;
-    //   nextEdgeIndex.value++;
-    // }
-    choice_word = nodes[source].name;
-    selectItem(nodes[source]);
-    console.log(choice_word)
+  for (const selectedNode of selectedNodes.value) {
+    choice_word = nodes[selectedNode].name;
+    selectItem(nodes[selectedNode]);
+    console.log(choice_word);
   }
 };
 
 // Hide unselected nodes
-const hideUnselected = (selectedNode: string) => {
-  // Iterate over all edges
-  for (const e in edges) {
-    // If this edge starts from the selected node and is dashed
-    if (edges[e].source == selectedNode && edges[e].dashed) {
-      // Delete this edge and the target node
-      delete nodes[edges[e].target];
-      delete edges[e];
-    } else if (edges[e].source == selectedNode) {
-      // Set the properties of remaining edges starting from the selected node
-      edges[e].dashed = false;
-      edges[e].color = "blue";
-      edges[e].selectable = false;
-      nodes[edges[e].source].selectable = true;
-      nodes[edges[e].target].selectable = true;
+// const hideUnselected = (selectedNode: string) => {
+//   // Iterate over all edges
+//   for (const e in edges) {
+//     // If this edge starts from the selected node and is dashed
+//     if (edges[e].source == selectedNode && edges[e].dashed) {
+//       // Delete this edge and the target node
+//       delete nodes[edges[e].target];
+//       delete edges[e];
+//     } else if (edges[e].source == selectedNode) {
+//       // Set the properties of remaining edges starting from the selected node
+//       edges[e].dashed = false;
+//       edges[e].color = "blue";
+//       edges[e].selectable = false;
+//       nodes[edges[e].source].selectable = true;
+//       nodes[edges[e].target].selectable = true;
+//     }
+//   }
+// };
+
+const hideUnselected = () => {
+  for (const selectedNode of selectedNodes.value) {
+    for (const edgeId in edges) {
+      const edge = edges[edgeId];
+      if (edge.source === selectedNode && edge.dashed) {
+        delete nodes[edge.target];
+        delete edges[edgeId];
+      } else if (edge.source === selectedNode) {
+        edge.dashed = false;
+        edge.color = "blue";
+        edge.selectable = false;
+        nodes[edge.source].selectable = true;
+        nodes[edge.target].selectable = true;
+      }
     }
   }
-};
+}
 
 
 
